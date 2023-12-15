@@ -2,13 +2,9 @@
   "name": "vuetify-vpagination-issu",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "test": "vitest --run"
   },
   "dependencies": {
-    "@mdi/font": "7.0.96",
-    "roboto-fontface": "*",
     "vue": "^3.2.0",
     "vuetify": "^3.0.0"
   },
