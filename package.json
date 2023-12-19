@@ -9,6 +9,7 @@
     "vuetify": "^3.0.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/vue": "^8.0.1",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/test-utils": "^2.4.3",

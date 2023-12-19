@@ -1,7 +1,8 @@
-import {render} from "@testing-library/vue";
+import {render,screen} from "@testing-library/vue";
 import {createVuetify} from "vuetify";
 import {VPagination} from "vuetify/components";
 import {components, directives} from "vuetify/dist/vuetify";
+import '@testing-library/jest-dom'
 
 const vuetify = createVuetify({
     components,
@@ -10,48 +11,81 @@ const vuetify = createVuetify({
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
-describe('VPagination', () => {
-    it('renders with aria-label', () => {
+describe('VPagination Current', () => {
+    it('renders buttons with arialabel', () => {
         const wrapper = render(VPagination, {
             global: {
                 plugins: [vuetify]
             }
         })
 
-        expect(wrapper.html()).toMatchSnapshot() // generates buttons with arialabel="Previous page" ariadisabled="true"
-        expect(wrapper.html()).toContain('aria-label="Previous page"')
+        expect(wrapper.html()).toMatchSnapshot()
+        screen.getAllByRole('button').forEach(b => {
+            expect(b).toHaveAttribute('arialabel')
+        })
     })
 
-    it('renders with aria-disabled', () => {
+    it('renders non current-page buttons with ariadisabled', () => {
         const wrapper = render(VPagination, {
             global: {
                 plugins: [vuetify]
             }
         })
 
-        expect(wrapper.html()).toMatchSnapshot() // generates buttons with arialabel="Previous page" ariadisabled="true"
-        expect(wrapper.html()).toContain('aria-disabled="true"')
+        expect(wrapper.html()).toMatchSnapshot()
+        screen.getAllByRole('button').forEach(b => {
+            if(!b.hasAttribute('ariacurrent'))
+                expect(b).toHaveAttribute('ariadisabled')
+        })
     })
 
-    it('does not render with arialabel', () => {
+    it('renders current page button with ariacurrent', () => {
         const wrapper = render(VPagination, {
             global: {
                 plugins: [vuetify]
             }
         })
 
-        expect(wrapper.html()).toMatchSnapshot() // generates buttons with arialabel="Previous page" ariadisabled="true"
-        expect(wrapper.html()).not.toContain('arialabel="Previous page"')
+        expect(wrapper.html()).toMatchSnapshot()
+        expect(screen.getByText('1').parentElement).toHaveAttribute('ariacurrent')
+    })
+})
+
+describe.skip('VPagination Expected', () => {
+    it('renders buttons with aria-label', () => {
+        render(VPagination, {
+            global: {
+                plugins: [vuetify]
+            }
+        })
+
+        screen.getAllByRole('button').forEach(b => {
+            expect(b).toHaveAttribute('aria-label')
+        })
+
+        screen.getByLabelText('Previous page') // This does not work in Vuetify 3.4.7 since `arialabel` isn't a proper label
     })
 
-    it('does not render with ariadisabled', () => {
+    it('renders non current-page buttons with aria-disabled', () => {
+        render(VPagination, {
+            global: {
+                plugins: [vuetify]
+            }
+        })
+
+        screen.getAllByRole('button').forEach(b => {
+            if(!b.hasAttribute('aria-current'))
+                expect(b).toHaveAttribute('aria-disabled')
+        })
+    })
+
+    it('renders current page button with aria-current', () => {
         const wrapper = render(VPagination, {
             global: {
                 plugins: [vuetify]
             }
         })
 
-        expect(wrapper.html()).toMatchSnapshot() // generates buttons with arialabel="Previous page" ariadisabled="true"
-        expect(wrapper.html()).not.toContain('ariadisabled="true"')
+        expect(screen.getByLabelText('Page 1, Current page').parentElement).toHaveAttribute('aria-current') // This does not work in Vuetify 3.4.7 since `arialabel` isn't a proper label
     })
 })

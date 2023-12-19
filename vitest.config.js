@@ -1,7 +1,27 @@
 import { fileURLToPath } from 'node:url';
 import {configDefaults, defineConfig} from 'vitest/config'
+import vue from "@vitejs/plugin-vue";
+import vuetify, {transformAssetUrls} from "vite-plugin-vuetify";
+import ViteFonts from "unplugin-fonts/vite";
 
 export default defineConfig({
+    plugins: [
+        vue({
+            template: { transformAssetUrls }
+        }),
+        // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
+        vuetify({
+            autoImport: true,
+        }),
+        ViteFonts({
+            google: {
+                families: [{
+                    name: 'Roboto',
+                    styles: 'wght@100;300;400;500;700;900',
+                }],
+            },
+        }),
+    ],
     resolve: {
         // https://vitest.dev/config/#alias
         alias: {

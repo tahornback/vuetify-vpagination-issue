@@ -1,53 +1,21 @@
-# default
+# VPagination ARIA issues
 
-## Project setup
+tl;dr - run `vite` and compare DOM with index.html and HelloWorld.vue to see how attributes are processed differently.
+See VPagination.spec.js to compare VPagination's current behavior to its desired behavior.
 
-```
-# yarn
-yarn
+## Problem
 
-# npm
-npm install
+When rendered outside of a browser (in unit tests, for example), the VBtns contained in VPagination render with
+attributes of `arialabel`, `ariadisabled`, and `ariacurrent`.
 
-# pnpm
-pnpm install
+## Why
 
-# bun
-bun install
-```
+When rendered in browser, the props `ariaLabel`, `ariaDisabled`, and `ariaCurrent` are automatically transformed
+into `aria-label`, `aria-disabled`, and `aria-current`, which allow the attributes to work as intended. This appears to
+be a Vue-specific feature, as in plain HTML `ariaLabel` is rendered as `arialabel`. These can be seen by running `vite`
+and inspecting the DOM.
 
-### Compiles and hot-reloads for development
-
-```
-# yarn
-yarn dev
-
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# bun
-bun run dev
-```
-
-### Compiles and minifies for production
-
-```
-# yarn
-yarn build
-
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# bun
-bun run build
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
+When the same elements are rendered in a non-browser environment (say, unit tests with Vue Test Utils or Vue Testing
+Library), attributes provided to HTML element in camelCase become lowercase, so `ariaLabel` becomes `arialabel`.
+The `arialabel`s (and other lowercase `aria` attributes) are not interpreted as proper ARIA attributes, and so are not
+picked up identified properly.
