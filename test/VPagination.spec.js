@@ -86,6 +86,6 @@ describe.skip('VPagination Expected', () => {
             }
         })
 
-        expect(screen.getByLabelText('Page 1, Current page').parentElement).toHaveAttribute('aria-current') // This does not work in Vuetify 3.4.7 since `arialabel` isn't a proper label
+        expect(screen.getByLabelText('Page 1, Current page')).toHaveAttribute('aria-current') // This does not work in Vuetify 3.4.7 since `arialabel` isn't a proper label
     })
 })
