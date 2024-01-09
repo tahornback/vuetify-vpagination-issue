@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "vue": "^3.2.0",
-    "vuetify": "^3.0.0"
+    "vuetify": "^3.4.10"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.5",
